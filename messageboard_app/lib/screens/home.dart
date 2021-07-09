@@ -4,11 +4,16 @@ import 'package:messageboard_app/screens/setting.dart';
 import 'package:messageboard_app/screens/wrapper.dart';
 import 'package:messageboard_app/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:messageboard_app/ad_helper.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+
 
 class Home extends StatelessWidget {
   // const Home({Key? key}) : super(key: key);
   // Create instant object _auth
   final AuthService _auth = AuthService();
+  
 
   @override
   Widget build(BuildContext context) {

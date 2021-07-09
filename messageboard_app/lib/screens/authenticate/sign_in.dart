@@ -1,3 +1,5 @@
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:messageboard_app/ad_helper.dart';
 import 'package:messageboard_app/screens/home.dart';
 import 'package:messageboard_app/services/auth.dart';
 import 'package:messageboard_app/shared/constants.dart';
@@ -24,6 +26,41 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String password = '';
   String error = '';
+
+  late BannerAd _bannerAd;
+  bool _isBannerAdReady = false;
+
+@override
+void initState() {
+
+  _bannerAd = BannerAd(
+    adUnitId: AdHelper.bannerAdUnitId,
+    request: AdRequest(),
+    size: AdSize.banner,
+    listener: BannerAdListener(
+      onAdLoaded: (_) {
+        setState(() {
+          _isBannerAdReady = true;
+        });
+      },
+      onAdFailedToLoad: (ad, err) {
+        print('Failed to load a banner ad: ${err.message}');
+        _isBannerAdReady = false;
+        ad.dispose();
+      },
+    ),
+  );
+
+  _bannerAd.load();
+}
+
+@override
+void dispose() {
+
+  _bannerAd.dispose();
+  super.dispose();
+  
+}
 
   @override
   Widget build(BuildContext context) {
@@ -105,13 +142,25 @@ class _SignInState extends State<SignIn> {
                       Buttons.Google,
                       text: "Sign in with Google",
                       onPressed: () async {
-                        _auth.signInWithGoogle();
+                        _auth.signInAnon();
                       },
-                    )
+                    ),
+                    if (_isBannerAdReady)
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          width: _bannerAd.size.width.toDouble(),
+                          height: _bannerAd.size.height.toDouble(),
+                          child: AdWidget(ad: _bannerAd),
+                        ),
+                      ),
                   ],
                 ),
               ),
+              
             ),
+            
+            
           );
   }
 }

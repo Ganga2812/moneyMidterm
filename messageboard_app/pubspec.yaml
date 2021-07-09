@@ -30,6 +30,8 @@ dependencies:
   flutter_spinkit:
   flutter_signin_button: ^2.0.0
   google_sign_in: ^5.0.4
+  google_mobile_ads: ^0.13.0
+  google_fonts: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -39,6 +41,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:           # new
+    sdk: flutter              # new
+  test: ^1.14.4   
   flutter_native_splash: ^1.2.0
   
 

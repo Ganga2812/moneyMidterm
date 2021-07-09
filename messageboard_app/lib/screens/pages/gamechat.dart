@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:messageboard_app/ad_helper.dart';
 import 'package:messageboard_app/models/user.dart';
 import 'package:messageboard_app/screens/home.dart';
 import 'package:messageboard_app/screens/pages/chats/gameschat.dart';
@@ -13,19 +15,60 @@ import 'package:messageboard_app/shared/constants.dart';
 import 'package:messageboard_app/widgets/message_tile.dart';
 import 'package:provider/provider.dart';
 
+
 class GameChatPage extends StatefulWidget {
   @override
   _GameChatPageState createState() => _GameChatPageState();
+
+
 }
 
 class _GameChatPageState extends State<GameChatPage> {
   final AuthService _auth = AuthService();
+ 
+  
 
   String input = '';
   FirebaseAuth auth = FirebaseAuth.instance;
 
   User user = FirebaseAuth.instance.currentUser!;
   String username = '';
+
+   InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          this._interstitialAd = ad;
+
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) {
+            },
+          );
+
+          setState(() {
+            _isInterstitialAdReady = true;
+          });
+          
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+          _isInterstitialAdReady = false;
+        },
+      ),
+    );
+  }
+
+  @override
+void dispose() {
+  _interstitialAd?.dispose();
+  super.dispose();
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +126,9 @@ class _GameChatPageState extends State<GameChatPage> {
                 onTap: () async {
                   await _auth.postGames(
                       username, input, DateTime.now().toString());
+                  if (_isInterstitialAdReady) {
+                    _loadInterstitialAd();
+                  }
                 },
                 child: Container(
                   height: 45.0,
@@ -160,6 +206,7 @@ void _errorPost(context) {
     },
   );
 }
+
 
 // getUserName(documentId) {
 
