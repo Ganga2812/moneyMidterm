@@ -43,7 +43,7 @@ class _StudyListState extends State<StudyList> {
                         ),
 
                         subtitle: Text(
-                          "${doc['Username']}\n${doc['Date'].toString().substring(0, 10)} at ${doc['Date'].toString().substring(11, 16)}",
+                          "${doc['Username']}",
                           style: TextStyle(
                             fontSize: 12,
                             fontStyle: FontStyle.italic,

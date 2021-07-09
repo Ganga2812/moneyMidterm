@@ -117,14 +117,6 @@ void dispose() {
               elevation: 0.0,
               title: Text('Sign In to Group Chat'),
               actions: <Widget>[
-                FlatButton.icon(
-                  textColor: Color(0xFFFFFFFF),
-                  onPressed: () async {
-                    widget.toggleView();
-                  },
-                  label: Text("Register"),
-                  icon: Icon(Icons.person_outlined),
-                ),
               ],
             ),
             body: Container(
