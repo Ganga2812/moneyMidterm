@@ -30,8 +30,51 @@ class _SignInState extends State<SignIn> {
   late BannerAd _bannerAd;
   bool _isBannerAdReady = false;
 
+  InterstitialAd? _interstitialAd;
+  bool _isInterstitialAdReady = false;
+
+  RewardedAd? _rewardedAd;
+  bool _isrewardedAdReady = false;
+
 @override
 void initState() {
+
+  RewardedAd.load(
+  adUnitId: AdHelper.rewardedAdUnitId,
+  request: AdRequest(),
+  rewardedAdLoadCallback: RewardedAdLoadCallback(
+    onAdLoaded: (RewardedAd ad) {
+      print('$ad loaded.');
+      // Keep a reference to the ad so you can show it later.
+      this._rewardedAd = ad;
+      setState(() {
+            _isrewardedAdReady = true;
+          });
+    },
+    onAdFailedToLoad: (LoadAdError error) {
+      print('RewardedAd failed to load: $error');
+    },
+  )
+  );
+   
+    InterstitialAd.load(
+      adUnitId: AdHelper.interstitialAdUnitId,
+      request: AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          this._interstitialAd = ad;
+          
+          setState(() {
+            _isInterstitialAdReady = true;
+          });
+          
+        },
+        onAdFailedToLoad: (err) {
+          print('Failed to load an interstitial ad: ${err.message}');
+
+        },
+      ),
+    );
 
   _bannerAd = BannerAd(
     adUnitId: AdHelper.bannerAdUnitId,
@@ -56,7 +99,7 @@ void initState() {
 
 @override
 void dispose() {
-
+  _interstitialAd?.dispose();
   _bannerAd.dispose();
   super.dispose();
 
@@ -96,6 +139,9 @@ void dispose() {
                         style: TextStyle(color: Color(0xFFFFFFFF))),
                         color: Color(0xFF2a9d8f),
                       onPressed: () async {
+                        if (_isInterstitialAdReady) {
+                          _interstitialAd!.show();
+                        }
                         _auth.signInAnon();
                       },
                       key: const ValueKey("signin"),

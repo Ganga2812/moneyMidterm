@@ -33,41 +33,8 @@ class _GameChatPageState extends State<GameChatPage> {
 
   User user = FirebaseAuth.instance.currentUser!;
   String username = '';
+  
 
-   InterstitialAd? _interstitialAd;
-  bool _isInterstitialAdReady = false;
-
-  void _loadInterstitialAd() {
-    InterstitialAd.load(
-      adUnitId: AdHelper.interstitialAdUnitId,
-      request: AdRequest(),
-      adLoadCallback: InterstitialAdLoadCallback(
-        onAdLoaded: (ad) {
-          this._interstitialAd = ad;
-
-          ad.fullScreenContentCallback = FullScreenContentCallback(
-            onAdDismissedFullScreenContent: (ad) {
-            },
-          );
-
-          setState(() {
-            _isInterstitialAdReady = true;
-          });
-          
-        },
-        onAdFailedToLoad: (err) {
-          print('Failed to load an interstitial ad: ${err.message}');
-
-        },
-      ),
-    );
-  }
-
-  @override
-void dispose() {
-  _interstitialAd?.dispose();
-  super.dispose();
-}
 
 
   @override
@@ -75,6 +42,7 @@ void dispose() {
     getUserName(user.uid);
 
     return Scaffold(
+      
       backgroundColor: Color(0xFFb5e1eb),
       appBar: AppBar(
         title: Text('Games Group'),
@@ -125,10 +93,7 @@ void dispose() {
               GestureDetector(
                 onTap: () async {
                   await _auth.postGames(
-                      username, input, DateTime.now().toString());
-                  if (_isInterstitialAdReady) {
-                    _interstitialAd!.show();
-                  }
+                      username, input, DateTime.now().toString()); 
                 },
                 child: Container(
                   height: 45.0,

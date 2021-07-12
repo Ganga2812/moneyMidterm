@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:messageboard_app/ad_helper.dart';
 import 'package:messageboard_app/screens/editprofile.dart';
 import 'package:messageboard_app/screens/home.dart';
 import 'package:messageboard_app/screens/setting.dart';
@@ -19,6 +21,31 @@ class _ProfileState extends State<Profile> {
   String? lname;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  RewardedAd? _rewardedAd;
+  bool _isrewardedAdReady = false;
+
+  @override
+void initState() {
+
+  RewardedAd.load(
+  adUnitId: AdHelper.rewardedAdUnitId,
+  request: AdRequest(),
+  rewardedAdLoadCallback: RewardedAdLoadCallback(
+    onAdLoaded: (RewardedAd ad) {
+      print('$ad loaded.');
+      // Keep a reference to the ad so you can show it later.
+      this._rewardedAd = ad;
+      setState(() {
+            _isrewardedAdReady = true;
+          });
+    },
+    onAdFailedToLoad: (LoadAdError error) {
+      print('RewardedAd failed to load: $error');
+    },
+  )
+  );
+}
 
   getUid() {
     final User? user = _auth.currentUser;
@@ -145,6 +172,8 @@ class _ProfileState extends State<Profile> {
           ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          _rewardedAd!.show(onUserEarnedReward: (RewardedAd ad, RewardItem rewardItem) {
+                      });
           final List<String> pageResults = await Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => EditProfile()));
           setState(() {
