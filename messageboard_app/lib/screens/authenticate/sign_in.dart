@@ -59,7 +59,7 @@ void dispose() {
 
   _bannerAd.dispose();
   super.dispose();
-  
+
 }
 
   @override
@@ -91,59 +91,14 @@ void dispose() {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    TextFormField(
-                      validator: (value) =>
-                          value!.isEmpty ? 'Enter a valid Email' : null,
-                      onChanged: (value) {
-                        setState(() => email = value);
-                      },
-                      decoration:
-                          textInputDecoration.copyWith(hintText: 'Enter Email'),
-                    ),
-                    SizedBox(
-                      height: 7,
-                    ),
-                    TextFormField(
-                      validator: (value) => value!.length < 6
-                          ? 'Enter an 6+ chars long password'
-                          : null,
-                      obscureText: true,
-                      onChanged: (value) {
-                        setState(() => password = value);
-                      },
-                      decoration: textInputDecoration.copyWith(
-                          hintText: 'Enter Password'),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    RaisedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() => loading = true);
-                          dynamic result = await _auth
-                              .signinWithEmailAndPassword(email, password);
-                          if (result == null) {
-                            setState(() {
-                              error = 'Could not sign in with those cedentials';
-                              loading = false;
-                            });
-                          }
-                        }
-                      },
-                      child: Text('Sign In',
-                          style: TextStyle(color: Color(0xFFFFFFFF))),
-                      color: Color(0xFF2a9d8f),
-                    ),
-                    Text(error,
-                        style: TextStyle(color: Colors.red, fontSize: 14)),
-                    Text('Or'),
-                    SignInButton(
-                      Buttons.Google,
-                      text: "Sign in with Google",
+                    MaterialButton(
+                      child: Text("Sign in Anonymously",
+                        style: TextStyle(color: Color(0xFFFFFFFF))),
+                        color: Color(0xFF2a9d8f),
                       onPressed: () async {
                         _auth.signInAnon();
                       },
+                      key: const ValueKey("signin"),
                     ),
                     if (_isBannerAdReady)
                       Align(

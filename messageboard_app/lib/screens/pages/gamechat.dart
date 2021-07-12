@@ -57,7 +57,7 @@ class _GameChatPageState extends State<GameChatPage> {
         },
         onAdFailedToLoad: (err) {
           print('Failed to load an interstitial ad: ${err.message}');
-          _isInterstitialAdReady = false;
+
         },
       ),
     );
@@ -127,7 +127,7 @@ void dispose() {
                   await _auth.postGames(
                       username, input, DateTime.now().toString());
                   if (_isInterstitialAdReady) {
-                    _loadInterstitialAd();
+                    _interstitialAd!.show();
                   }
                 },
                 child: Container(

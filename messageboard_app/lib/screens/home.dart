@@ -40,6 +40,7 @@ class Home extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => Setting()));
             }),
             CustomListTile(Icons.logout, 'Log Out', () async {
+              
               await _auth.signOut();
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => Wrapper()));
@@ -56,8 +57,11 @@ class CustomListTile extends StatelessWidget {
   IconData icon;
   String text;
   Function onTap;
+  
+  
 
   CustomListTile(this.icon, this.text, this.onTap);
+  
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -73,6 +77,7 @@ class CustomListTile extends StatelessWidget {
           onTap: () {
             onTap();
           },
+          key: const ValueKey("games"),
           leading: Icon(icon, color: Color(0xFF2a9d8f)),
           title: Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 0),
