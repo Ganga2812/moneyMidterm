@@ -19,7 +19,11 @@ This is a messaging app that allows users to chat amongst themselves. It uses Fi
 * After extracting on your device, locate your terminal and go to the path where the file is saved. Make sure you are in the messageboard_app directory which is inside the moneyMidterm folder.
 * Save the pubspec.yaml file to first download all the dependencies
 * Select your emulator of choice. Either web, android, or iOS(ads will only work on android and ios).
-* In the terminal type
+* * In the terminal type to run integration test
+   ```
+   flutter drive --driver integration_test/driver.dart --target integration_test/app_test.dart
+   ```
+* In the terminal type to run app normally
    ```
    flutter run
    ```
